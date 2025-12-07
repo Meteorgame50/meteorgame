@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🌠 METEOR YOMG'IR - 50 NIGHTS 🌠</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="ui">
+    <header id="hud">
+      <div class="left">
+        <div id="night-display">🌙 Tun: <span id="night-val">1</span>/50</div>
+        <div id="time-left">⏱️ Vaqt: <span id="time-val">30</span>s</div>
+        <div id="score">💎 Olmos: <span id="score-val">0</span></div>
+      </div>
+      <div class="right">
+        <div id="lives-display">❤️ Jonlar: <span id="lives-val">5</span></div>
+        <button id="shop-btn" class="btn">🛍️ SHOP</button>
+        <button id="missions-btn" class="btn">📋 MISSIONS</button>
+        <button id="rules-btn" class="btn">📖 QOIDALAR</button>
+        <button id="pause-btn" class="btn">Pauza</button>
+      </div>
+    </header>
+
+    <main id="game-wrap">
+      <canvas id="game"></canvas>
+
+      <div id="touch-controls" aria-hidden="true">
+        <button id="left-touch" class="touch-btn">◀</button>
+        <button id="right-touch" class="touch-btn">▶</button>
+      </div>
+
+      <!-- MENU OVERLAY -->
+      <div id="overlay-menu" class="overlay">
+        <div class="panel">
+          <h1>🌠 METEOR YOMG'IR 🌠</h1>
+          <p>Langit yerdan meteor yomg'ir tushaydi!</p>
+          <p class="subtitle">💫 Meteorlardan qoching, olmoslarni to'pla, SHOP-da skin ol!</p>
+          <div class="controls">
+            <strong>🎮 ASOSIY QOIDALAR:</strong>
+            <ul>
+              <li>🌙 <strong>50 TUNDA</strong> yetib kor va YUTIB QO'Y!</li>
+              <li>⏱️ Har bir tunda <strong>30 soniya</strong> vaqt bor</li>
+              <li>🔴 <strong>Meteorga tegsa</strong> - 1 jon yo'qoladi</li>
+              <li>❤️ <strong>5 jondan keyin</strong> - GAME OVER</li>
+              <li>💎 <strong>Olmoslarni to'plab</strong> SHOP-da SKIN ol!</li>
+              <li>📋 <strong>30ta missiya</strong> ni tugatib bonus olish!</li>
+              <li>🎯 Har tundan keyin <strong>100 + Bonus olmos</strong> olasiz</li>
+            </ul>
+          </div>
+
+          <label class="range-row">Qiyinchilik:
+            <input id="difficulty" type="range" min="0.5" max="2" step="0.1" value="1">
+          </label>
+
+          <div class="panel-actions">
+            <button id="start-btn" class="btn primary">50 TUNNI BOSHLASH 🚀</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RULES OVERLAY -->
+      <div id="overlay-rules" class="overlay hidden">
+        <div class="panel rules-panel">
+          <h2>📖 O'YIN QOIDALARI 📖</h2>
+          <div class="rules-content">
+            <div class="rule-section">
+              <h3>🎮 ASOSIY QOIDALAR</h3>
+              <ul>
+                <li>🌙 <strong>50 TUN</strong> tugatishingiz kerak</li>
+                <li>⏱️ Har tunning <strong>30 soniya</strong> davomiyligi</li>
+                <li>❤️ <strong>5 JONINGIZ</strong> bor - ularni saqlang!</li>
+                <li>🔴 Meteor tegsa - 1 jon yo'qoladi</li>
+                <li>💀 Barcha jonlar yo'qol bo'lsa - GAME OVER</li>
+              </ul>
+            </div>
+
+            <div class="rule-section">
+              <h3>💎 OLMOS SISTEMA</h3>
+              <ul>
+                <li>✅ <strong>Tun tugatsa</strong> +100 olmos</li>
+                <li>🔴 <strong>Meteor yo'q qilsa</strong> +10 olmos</li>
+                <li>🎁 <strong>Bonus</strong> - meteorni yo'q qilgan sonicha</li>
+                <li>🏆 <strong>Missiya tugatsa</strong> - yanada ko'p bonus!</li>
+              </ul>
+            </div>
+
+            <div class="rule-section">
+              <h3>🛍️ SHOP SISTEMA</h3>
+              <ul>
+                <li>👕 <strong>15 xil SKIN</strong> mavjud</li>
+                <li>💰 Eng arzon skin - <strong>35,000 olmos</strong></li>
+                <li>⭐ Qimmatli skin - <strong>65,000 olmos</strong> gacha</li>
+                <li>🎨 Har skin <strong>o'z rangi</strong> va effekti</li>
+              </ul>
+            </div>
+
+            <div class="rule-section">
+              <h3>📋 MISSIYA SISTEMA</h3>
+              <ul>
+                <li>🎯 <strong>30 ta MISSIYA</strong> tugatish uchun</li>
+                <li>📊 Har missiya <strong>3 bosqich</strong> ga bo'lingan</li>
+                <li>🏅 Har bosqich uchun <strong>bonus olmos</strong></li>
+                <li>🌟 Har missiya <strong>boshqa target</strong> bor</li>
+              </ul>
+            </div>
+
+            <div class="rule-section">
+              <h3>⚡ HARAKAT TIZIMI</h3>
+              <ul>
+                <li>⬅️ <strong>A / Left Arrow</strong> - Chapga</li>
+                <li>➡️ <strong>D / Right Arrow</strong> - O'ngga</li>
+                <li>P - Pauza / Davom</li>
+                <li>📱 Mobilda - sura tugmalari</li>
+              </ul>
+            </div>
+
+            <div class="rule-section">
+              <h3>🎨 ANIMATSIYA</h3>
+              <ul>
+                <li>💎 O'yinchi <strong>diamond shakli</strong> (◇)</li>
+                <li>🔴 Meteorlar <strong>dumaloq</strong> va shuvla bilan</li>
+                <li>✨ Chapga/o'ngga bosishda <strong>aylanib harakat</strong></li>
+                <li>💥 Portlash effekti bilan zarrachalar tarqaladi</li>
+              </ul>
+            </div>
+
+            <div class="rule-section">
+              <h3>🏆 YUTISH SHARTI</h3>
+              <ul>
+                <li>✅ <strong>50 tunni</strong> tugatish kerak</li>
+                <li>🎉 Victory screen ko'rinadi</li>
+                <li>💎 <strong>BARCHASINI OLMOS</strong> sifatida ol!</li>
+                <li>🌟 Qayta o'yna yoki SHOP-da skin ol!</li>
+              </ul>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button id="close-rules-btn" class="btn">Yopish</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHOP OVERLAY -->
+      <div id="overlay-shop" class="overlay hidden">
+        <div class="panel shop-panel">
+          <h2>🛍️ SKIN SHOP 🛍️</h2>
+          <p>Sizning Olmos: <span id="shop-diamonds">0</span> 💎</p>
+          <p>Tanlagan Skin: <span id="current-skin">Default</span></p>
+          <div id="skins-grid" class="skins-grid">
+            <!-- Skinlar shu yerda ko'rinadi -->
+          </div>
+          <div class="panel-actions">
+            <button id="close-shop-btn" class="btn">Yopish</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MISSIONS OVERLAY -->
+      <div id="overlay-missions" class="overlay hidden">
+        <div class="panel missions-panel">
+          <h2>📋 MISSIONS (30/30) 📋</h2>
+          <div id="missions-list" class="missions-list">
+            <!-- Missiyalar shu yerda ko'rinadi -->
+          </div>
+          <div class="panel-actions">
+            <button id="close-missions-btn" class="btn">Yopish</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAUSE OVERLAY -->
+      <div id="overlay-pause" class="overlay hidden">
+        <div class="panel">
+          <h2>⏸️ PAUZA ⏸️</h2>
+          <p>Tun <span id="pause-night">1</span>/50</p>
+          <p>Qolgan Jonlar: <span id="pause-lives">5</span>❤️</p>
+          <div class="panel-actions">
+            <button id="resume-btn" class="btn primary">Davom Et</button>
+            <button id="menu-btn" class="btn">Menyu</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- NIGHT COMPLETE OVERLAY -->
+      <div id="overlay-night-complete" class="overlay hidden">
+        <div class="panel night-complete">
+          <h2>🌙 TUN <span id="completed-night">1</span>/50 TUGATILDI! 🌙</h2>
+          <p class="big-text">+100 💎</p>
+          <p>Yo'qolgan meteorlar: <span id="meteors-destroyed">0</span> 🔴</p>
+          <p>Bonus Ball: <span id="bonus-score">0</span> ✨</p>
+          <p>Qolgan Jonlar: <span id="remaining-lives">5</span>❤️</p>
+          <div class="panel-actions">
+            <button id="next-night-btn" class="btn primary">Keyingi Tun</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAMEOVER OVERLAY -->
+      <div id="overlay-gameover" class="overlay hidden">
+        <div class="panel game-over">
+          <h2>💀 OYINGA TUGADI! 💀</h2>
+          <p>Tun <span id="final-night">1</span>/50 da yutqazibdiz</p>
+          <p class="big-text">Umumiy Ball: <span id="final-score">0</span> 💎</p>
+          <div class="panel-actions">
+            <button id="again-btn" class="btn primary">Qayta Boshlash</button>
+            <button id="menu2-btn" class="btn">Menyu</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VICTORY OVERLAY -->
+      <div id="overlay-victory" class="overlay hidden">
+        <div class="panel victory">
+          <h2>🏆 DUNYONI QUTQARDINGIZ! 🏆</h2>
+          <p class="big-text">50 METEOR YOMG'IRI TA'M OLDI!</p>
+          <p>Siz barcha 50 tunni tugatdingiz!</p>
+          <p>Langit endi xavfsiz 😊</p>
+          <p class="victory-score">Yakuniy Ball: <span id="victory-score">0</span> 💎</p>
+          <div class="panel-actions">
+            <button id="victory-again-btn" class="btn primary">Qayta O'yna</button>
+            <button id="victory-menu-btn" class="btn">Menyu</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer id="foot">🌠 50 TUNDA DUNYONI QUTQAR! 🌠</footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
